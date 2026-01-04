@@ -3,6 +3,7 @@ import { Home } from '../screens/Home'
 import { Bookmark, Film, Ticket } from 'lucide-react-native'
 import { Tickets } from '../screens/Tickets'
 import { Favorites } from '../screens/Favorites'
+import { TabBar } from './tab-bar'
 
 const Tab = createBottomTabNavigator()
 
@@ -23,17 +24,8 @@ export function HomeTabNavigator() {
 		<Tab.Navigator
 			screenOptions={{
 				headerShown: false,
-				tabBarShowLabel: false,
-				tabBarIconStyle: {
-					marginTop: 4,
-				},
-				tabBarItemStyle: {
-					paddingVertical: 6,
-				},
-				tabBarStyle: {
-					height: 56,
-				},
 			}}
+			tabBar={(props) => <TabBar {...props} />}
 		>
 			<Tab.Screen
 				name="Home"
