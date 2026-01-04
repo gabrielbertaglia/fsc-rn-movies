@@ -1,8 +1,9 @@
 import React from 'react'
-import { Image, Text, View } from 'react-native'
+import { Image, View } from 'react-native'
 import { MovieResult } from '../../hooks/useTMDB'
 import { styles } from './styles'
 import { Star } from 'lucide-react-native'
+import { Text } from '../text'
 
 interface MovieItemProps {
 	movie: MovieResult
@@ -22,13 +23,13 @@ export function MovieItem({ movie }: MovieItemProps) {
 			/>
 
 			<View style={styles.info}>
-				<Text style={styles.title} numberOfLines={2}>
+				<Text numberOfLines={2} variant="movieTitle">
 					{movie.title}
 				</Text>
 
 				<View style={styles.rating}>
 					<Star size={14} color="#FFC319" fill="#FFC319" />
-					<Text style={styles.ratingText}>{movie.vote_average.toFixed(1)}/10 IMDb</Text>
+					<Text variant="caption">{movie.vote_average.toFixed(1)}/10 IMDb</Text>
 				</View>
 			</View>
 		</View>

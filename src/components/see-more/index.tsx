@@ -1,6 +1,7 @@
 import React from 'react'
-import { StyleSheet, Text, TouchableOpacity } from 'react-native'
+import { TouchableOpacity } from 'react-native'
 import { styles } from './styles'
+import { Text } from '../text'
 
 interface SeeMoreButtonProps {
 	label?: string
@@ -10,7 +11,7 @@ interface SeeMoreButtonProps {
 export function SeeMoreButton({ label = 'See more', onPress }: SeeMoreButtonProps) {
 	return (
 		<TouchableOpacity activeOpacity={0.7} style={styles.container} onPress={onPress}>
-			<Text style={styles.text}>{label}</Text>
+			<Text variant="link">{label}</Text>
 		</TouchableOpacity>
 	)
 }

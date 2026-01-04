@@ -8,9 +8,4 @@ export const styles = StyleSheet.create({
 		borderWidth: 1,
 		borderColor: '#E5E4EA',
 	},
-	text: {
-		fontSize: 10,
-		fontWeight: '500',
-		color: '#AAA9B1',
-	},
 })

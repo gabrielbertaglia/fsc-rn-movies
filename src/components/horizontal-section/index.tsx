@@ -1,7 +1,8 @@
 import React from 'react'
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { FlatList, View } from 'react-native'
 import { styles } from './styles'
 import { SeeMoreButton } from '../see-more'
+import { Text } from '../text'
 
 interface HorizontalSectionProps<T> {
 	title: string
@@ -21,7 +22,9 @@ export function HorizontalSection<T>({
 	return (
 		<View style={styles.wrapper}>
 			<View style={styles.header}>
-				<Text style={styles.title}>{title}</Text>
+				<Text style={styles.title} variant="sectionTitle">
+					{title}
+				</Text>
 
 				{onSeeMore && <SeeMoreButton onPress={onSeeMore} />}
 			</View>
