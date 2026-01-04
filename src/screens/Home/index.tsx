@@ -1,62 +1,91 @@
-import { Text, View } from 'react-native'
-import { useTMDB } from '../../hooks/useTMDB'
+import { MovieResult, useTMDB } from '../../hooks/useTMDB'
 import { useEffect } from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { ListCheck, ListTodo } from 'lucide-react-native';
-
+import { Bookmark, Film, Ticket } from 'lucide-react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { HorizontalSection } from '../../components/horizontal-section'
+import { MovieItem } from '../../components/movie-item'
+import { useNavigation } from '@react-navigation/native'
+import { Tickets } from '../Tickets'
+import { Favorites } from '../Favorites'
 
 const Tab = createBottomTabNavigator()
 
-function TasksScreen() {
+function FilmTabIcon({ color, size }: { color: string; size: number }) {
+	return <Film color={color} size={size} />
+}
+
+function TicketsTabIcon({ color, size }: { color: string; size: number }) {
+	return <Ticket color={color} size={size} />
+}
+
+function FavoritesTabIcon({ color, size }: { color: string; size: number }) {
+	return <Bookmark color={color} size={size} />
+}
+
+function HomeScreen({ nowPlayingMovies }: { nowPlayingMovies: MovieResult[] }) {
+	const navigation = useNavigation()
+
 	return (
-		<View>
-			<Text>Tasks Screen</Text>
-		</View>
+		<SafeAreaView>
+			<HorizontalSection
+				title="Now Playing"
+				data={nowPlayingMovies}
+				keyExtractor={(movie) => movie.id.toString()}
+				renderItem={(movie) => <MovieItem movie={movie} />}
+				onSeeMore={() => navigation.navigate('NowPlaying')}
+			/>
+		</SafeAreaView>
 	)
-}
-
-function CompletedTasksScreen() {
-	return (
-		<View>
-			<Text>Tasks Screen</Text>
-		</View>
-	)
-}
-
-function TasksTabIcon({ color, size }: { color: string; size: number }) {
-  return <ListTodo color={color} size={size} />;
-}
-
-function CompletedTasksTabIcon({ color, size }: { color: string; size: number }) {
-  return <ListCheck color={color} size={size} />;
 }
 
 export function Home() {
-	const { getNowPlaying } = useTMDB()
+	const { getNowPlaying, nowPlayingMovies } = useTMDB()
 
 	useEffect(() => {
 		async function fetchMovies() {
-			const movies = await getNowPlaying({ page: 1 })
-			console.log(movies)
+			getNowPlaying({ page: 1 })
+			console.log('nowPlayingMovies', nowPlayingMovies)
 		}
 		fetchMovies()
 	}, [])
 
 	return (
-		<Tab.Navigator screenOptions={{ headerShown: false }}>
+		<Tab.Navigator
+			screenOptions={{
+				headerShown: false,
+				tabBarShowLabel: false,
+				tabBarIconStyle: {
+					marginTop: 4,
+				},
+				tabBarItemStyle: {
+					paddingVertical: 6,
+				},
+				tabBarStyle: {
+					height: 56,
+				},
+			}}
+		>
 			<Tab.Screen
-				name="Tasks"
-				component={TasksScreen}
+				name="HomeScreen"
+				component={() => <HomeScreen nowPlayingMovies={nowPlayingMovies} />}
 				options={{
-					title: 'Tarefas',
-					tabBarLabel: 'Tarefas',
-					tabBarIcon: TasksTabIcon,
+					tabBarIcon: FilmTabIcon,
 				}}
 			/>
 			<Tab.Screen
-				name="Completed"
-				component={CompletedTasksScreen}
-				options={{ title: 'Concluídas', tabBarIcon: CompletedTasksTabIcon, tabBarLabel: 'Tarefas' }}
+				name="Tickets"
+				component={Tickets}
+				options={{
+					tabBarIcon: TicketsTabIcon,
+				}}
+			/>
+			<Tab.Screen
+				name="Favorites"
+				component={Favorites}
+				options={{
+					tabBarIcon: FavoritesTabIcon,
+				}}
 			/>
 		</Tab.Navigator>
 	)
