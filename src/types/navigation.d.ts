@@ -2,6 +2,7 @@ export type RootStackParamList = {
 	Home: undefined
 	NowPlaying: undefined
 	MovieDetails: { movieId: number }
+	Popular: undefined
 }
 
 declare global {

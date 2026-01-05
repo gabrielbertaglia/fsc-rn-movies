@@ -1,6 +1,9 @@
 import { atom } from 'jotai'
-import { MovieResult } from '../hooks/useTMDB'
+import { Genre, MovieResult } from '../hooks/useTMDB'
 
 export const atoms = {
 	nowPlayingMovies: atom<MovieResult[]>([]),
+	popularMovies: atom<MovieResult[]>([]),
+	genres: atom<Genre[]>([]),
+	movieDetails: atom<TMDBMovieDetails>({} as TMDBMovieDetails),
 }

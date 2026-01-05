@@ -40,3 +40,28 @@ export function HorizontalSection<T>({
 		</View>
 	)
 }
+
+export function VerticalSection<T>({
+	title,
+	data,
+	keyExtractor,
+	renderItem,
+	onSeeMore,
+}: HorizontalSectionProps<T>) {
+	return (
+		<View style={styles.wrapper}>
+			<View style={styles.header}>
+				<Text style={styles.title} variant="sectionTitle">
+					{title}
+				</Text>
+				{onSeeMore && <SeeMoreButton onPress={onSeeMore} />}
+			</View>
+			<FlatList
+				data={data}
+				keyExtractor={keyExtractor}
+				renderItem={({ item }) => renderItem(item)}
+				contentContainerStyle={styles.list}
+			/>
+		</View>
+	)
+}
