@@ -5,5 +5,5 @@ export const atoms = {
 	nowPlayingMovies: atom<MovieResult[]>([]),
 	popularMovies: atom<MovieResult[]>([]),
 	genres: atom<Genre[]>([]),
-	movieDetails: atom<TMDBMovieDetails>({} as TMDBMovieDetails),
+	movieDetails: atom<MovieDetails | null>(null),
 }

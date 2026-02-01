@@ -11,16 +11,6 @@ export const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'space-between',
 	},
-	title: {
-		fontSize: 20,
-		fontWeight: '700',
-		color: '#110E47',
-	},
-	seeMore: {
-		fontSize: 14,
-		color: '#4da6ff',
-		fontWeight: '500',
-	},
 	list: {
 		paddingHorizontal: 16,
 		gap: 12,

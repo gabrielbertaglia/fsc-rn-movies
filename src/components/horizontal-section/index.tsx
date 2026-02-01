@@ -3,6 +3,7 @@ import { FlatList, View } from 'react-native'
 import { styles } from './styles'
 import { SeeMoreButton } from '../see-more'
 import { Text } from '../text'
+// import { MerriweatherText } from '../text/merriweather'
 
 interface HorizontalSectionProps<T> {
 	title: string
@@ -22,10 +23,9 @@ export function HorizontalSection<T>({
 	return (
 		<View style={styles.wrapper}>
 			<View style={styles.header}>
-				<Text style={styles.title} variant="sectionTitle">
+				<Text family="merriweather" size={16} style={{ color: '#110E47' }} weight="bold">
 					{title}
 				</Text>
-
 				{onSeeMore && <SeeMoreButton onPress={onSeeMore} />}
 			</View>
 
@@ -49,9 +49,9 @@ export function VerticalSection<T>({
 	onSeeMore,
 }: HorizontalSectionProps<T>) {
 	return (
-		<View style={styles.wrapper}>
+		<View style={[styles.wrapper, { flex: 1 }]}>
 			<View style={styles.header}>
-				<Text style={styles.title} variant="sectionTitle">
+				<Text family="merriweather" size={16} style={{ color: '#110E47' }} weight="bold">
 					{title}
 				</Text>
 				{onSeeMore && <SeeMoreButton onPress={onSeeMore} />}

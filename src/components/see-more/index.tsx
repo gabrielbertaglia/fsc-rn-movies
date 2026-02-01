@@ -2,6 +2,7 @@ import React from 'react'
 import { TouchableOpacity } from 'react-native'
 import { styles } from './styles'
 import { Text } from '../text'
+// import { MulishText } from '../text/mulish'
 
 interface SeeMoreButtonProps {
 	label?: string
@@ -11,7 +12,9 @@ interface SeeMoreButtonProps {
 export function SeeMoreButton({ label = 'See more', onPress }: SeeMoreButtonProps) {
 	return (
 		<TouchableOpacity activeOpacity={0.7} style={styles.container} onPress={onPress}>
-			<Text variant="link">{label}</Text>
+			<Text size={10} style={{ color: '#AAA9B1' }}>
+				{label}
+			</Text>
 		</TouchableOpacity>
 	)
 }

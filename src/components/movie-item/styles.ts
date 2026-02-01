@@ -13,10 +13,24 @@ export const styles = StyleSheet.create({
 	info: {
 		marginTop: 8,
 	},
-	rating: {
+	horizontalContainer: {
 		flexDirection: 'row',
-		alignItems: 'center',
-		marginTop: 4,
-		gap: 4,
+		width: '100%',
+		marginBottom: 16,
+	},
+	horizontalPoster: {
+		width: 85,
+		height: 120,
+		borderRadius: 5,
+	},
+	horizontalInfo: {
+		flex: 1,
+		marginLeft: 16,
+		gap: 8,
+	},
+	genreContainer: {
+		flexDirection: 'row',
+		gap: 8,
+		flexWrap: 'wrap',
 	},
 })

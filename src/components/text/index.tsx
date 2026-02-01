@@ -1,50 +1,37 @@
-import React from 'react'
-import { Text as RNText, TextProps, StyleSheet } from 'react-native'
+import { Text as TextRN, TextProps } from 'react-native'
+import {
+	typography,
+	TypographyFamily,
+	TypographySize,
+	TypographyWeight,
+} from '../../theme/typography'
 
-type TextVariant = keyof typeof typography
-
-interface Props extends TextProps {
-	variant?: TextVariant
+interface AppTextProps extends TextProps {
+	family?: TypographyFamily
+	weight?: TypographyWeight<TypographyFamily>
+	size?: TypographySize
 }
 
-export function Text({ variant = 'body', style, ...props }: Props) {
-	return <RNText {...props} style={[styles.base, typography[variant], style]} />
+export function Text({
+	family = 'mulish',
+	weight = 'regular',
+	size = 16,
+	style,
+	children,
+	...props
+}: AppTextProps) {
+	return (
+		<TextRN
+			{...props}
+			style={[
+				{
+					fontFamily: typography.family[family][weight],
+				},
+				typography.size[size],
+				style,
+			]}
+		>
+			{children}
+		</TextRN>
+	)
 }
-
-const styles = StyleSheet.create({
-	base: {
-		includeFontPadding: false,
-	},
-})
-export const typography = {
-	base: {
-		fontSize: 12,
-		fontWeight: '400',
-		color: '#000',
-	},
-
-	body: {},
-
-	caption: {
-		fontSize: 12,
-		color: '#9C9C9C',
-	},
-
-	movieTitle: {
-		fontSize: 14,
-		fontWeight: '700',
-		color: '#000',
-	},
-
-	sectionTitle: {
-		fontSize: 20,
-		fontWeight: '700',
-		color: '#110E47',
-	},
-
-	link: {
-		fontSize: 10,
-		fontWeight: '500',
-		color: '#AAA9B1',
-	},
-} as const

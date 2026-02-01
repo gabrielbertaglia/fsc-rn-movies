@@ -7,7 +7,9 @@ export function Rating({ vote_average }: { vote_average: number }) {
 	return (
 		<View style={styles.rating}>
 			<Star size={14} color="#FFC319" fill="#FFC319" />
-			<Text variant="caption">{vote_average.toFixed(1)}/10 IMDb</Text>
+			<Text size={12} style={{ color: '#9C9C9C' }}>
+				{(vote_average / 2).toFixed(1)}/10 IMDb
+			</Text>
 		</View>
 	)
 }

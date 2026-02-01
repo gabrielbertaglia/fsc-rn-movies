@@ -13,7 +13,9 @@ export function Badge({ children }: { children: React.ReactNode }) {
 				borderRadius: 999,
 			}}
 		>
-			<Text style={{ color: '#88A4E8', fontSize: 10, fontWeight: 'bold' }}>{children}</Text>
+			<Text size={8} weight="semiBold" style={{ color: '#88A4E8', fontWeight: 'bold' }}>
+				{children?.toString().toUpperCase()}
+			</Text>
 		</View>
 	)
 }
