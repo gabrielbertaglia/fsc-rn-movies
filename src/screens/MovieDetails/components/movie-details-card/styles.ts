@@ -16,7 +16,6 @@ export const styles = StyleSheet.create({
 
 	content: {
 		marginTop: -12,
-		backgroundColor: '#FFF',
 		borderTopLeftRadius: 12,
 		borderTopRightRadius: 12,
 		padding: 20,
@@ -48,7 +47,6 @@ export const styles = StyleSheet.create({
 	},
 
 	castItem: {
-		marginRight: 12,
 		width: 80,
 	},
 	castImage: {

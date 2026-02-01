@@ -32,14 +32,14 @@ export function Home() {
 							data={nowPlayingMovies}
 							keyExtractor={(movie) => movie.id.toString()}
 							renderItem={(movie) => <MovieItem movie={movie} />}
-							// onSeeMore={() => navigation.navigate('NowPlaying')}
+							onSeeMore={() => navigation.navigate('NowPlaying')}
 						/>
 
 						<Text
 							family="merriweather"
 							size={16}
 							weight="bold"
-							style={{ marginHorizontal: 16, marginBottom: 8 }}
+							style={{ marginBottom: 8, color: '#110E47' }}
 						>
 							Popular
 						</Text>

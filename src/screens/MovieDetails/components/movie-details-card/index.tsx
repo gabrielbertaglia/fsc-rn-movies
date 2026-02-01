@@ -183,6 +183,7 @@ export function MovieDetailsCard({
 					data={movieDetails.casts.cast.slice(0, 6)}
 					keyExtractor={(item) => String(item.id)}
 					showsHorizontalScrollIndicator={false}
+					contentContainerStyle={{ gap: 12, paddingRight: 20 }}
 					renderItem={({ item }) => (
 						<View style={styles.castItem}>
 							<Image

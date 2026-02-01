@@ -27,7 +27,7 @@ export function MovieDetails() {
 	}
 
 	return (
-		<SafeAreaView>
+		<SafeAreaView style={{ flex: 1, backgroundColor: '#FFF' }}>
 			<MovieDetailsCard movieDetails={movieDetails} />
 		</SafeAreaView>
 	)
