@@ -53,33 +53,43 @@ export function MovieItem({ movie }: MovieItemProps) {
 
 export function MovieItemHorizontal({ movie }: MovieItemProps) {
 	const { genres } = useTMDB()
+	const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
+
 	const getGenreNames = (genreIds: number[]): string[] => {
 		return genreIds
 			.map((id) => genres.find((genre) => genre.id === id)?.name)
 			.filter((name): name is string => name !== undefined)
 	}
 
-	return (
-		<View style={styles.horizontalContainer}>
-			<Image
-				source={{
-					uri: movie.poster_path ? `${IMAGE_BASE_URL}${movie.poster_path}` : undefined,
-				}}
-				style={styles.horizontalPoster}
-				resizeMode="cover"
-			/>
-			<View style={styles.horizontalInfo}>
-				<Text size={14} weight="bold" numberOfLines={2}>
-					{movie.title}
-				</Text>
+	function handlePress() {
+		navigation.navigate('MovieDetails', {
+			movieId: movie.id,
+		})
+	}
 
-				<Rating vote_average={movie.vote_average} />
-				<View style={styles.genreContainer}>
-					{getGenreNames(movie.genre_ids).map((genre, index) => (
-						<Badge key={index}>{genre}</Badge>
-					))}
+	return (
+		<Pressable onPress={handlePress}>
+			<View style={styles.horizontalContainer}>
+				<Image
+					source={{
+						uri: movie.poster_path ? `${IMAGE_BASE_URL}${movie.poster_path}` : undefined,
+					}}
+					style={styles.horizontalPoster}
+					resizeMode="cover"
+				/>
+				<View style={styles.horizontalInfo}>
+					<Text size={14} weight="bold" numberOfLines={2}>
+						{movie.title}
+					</Text>
+
+					<Rating vote_average={movie.vote_average} />
+					<View style={styles.genreContainer}>
+						{getGenreNames(movie.genre_ids).map((genre, index) => (
+							<Badge key={index}>{genre}</Badge>
+						))}
+					</View>
 				</View>
 			</View>
-		</View>
+		</Pressable>
 	)
 }

@@ -23,7 +23,7 @@ export function Home() {
 				data={nowPlayingMovies}
 				keyExtractor={(movie) => movie.id.toString()}
 				renderItem={(movie) => <MovieItem movie={movie} />}
-				onSeeMore={() => navigation.navigate('NowPlaying')}
+				// onSeeMore={() => navigation.navigate('NowPlaying')}
 			/>
 
 			<VerticalSection
@@ -31,7 +31,7 @@ export function Home() {
 				data={popular}
 				keyExtractor={(movie) => movie.id.toString()}
 				renderItem={(movie) => <MovieItemHorizontal movie={movie} />}
-				onSeeMore={() => navigation.navigate('Popular')}
+				// onSeeMore={() => navigation.navigate('Popular')}
 			/>
 		</SafeAreaView>
 	)
