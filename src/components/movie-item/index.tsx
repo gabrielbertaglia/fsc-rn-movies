@@ -80,8 +80,6 @@ export function MovieItemHorizontal({ movie, disableNavigation }: MovieItemProps
 		})
 	}
 
-	console.log('movie.genre_ids', movie.genre_ids)
-
 	return (
 		<Pressable onPress={disableNavigation ? undefined : handlePress}>
 			<View style={styles.horizontalContainer}>

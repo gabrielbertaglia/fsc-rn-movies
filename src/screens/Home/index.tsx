@@ -4,9 +4,18 @@ import { MovieItem, MovieItemHorizontal } from '../../components/movie-item'
 import { HorizontalSection } from '../../components/horizontal-section'
 import { Text } from '../../components/text'
 import { useTMDB } from '../../hooks/useTMDB'
+import { useNavigation } from '@react-navigation/native'
+import { useEffect } from 'react'
 
 export function Home() {
-	const { popular, nowPlayingMovies } = useTMDB()
+	const { getNowPlaying, nowPlayingMovies, popular, getPopular, getGenres } = useTMDB()
+	const navigation = useNavigation()
+
+	useEffect(() => {
+		getNowPlaying({ page: 1 })
+		getPopular({ page: 1 })
+		getGenres()
+	}, [])
 
 	return (
 		<SafeAreaView style={{ flex: 1 }}>
@@ -23,6 +32,7 @@ export function Home() {
 							data={nowPlayingMovies}
 							keyExtractor={(movie) => movie.id.toString()}
 							renderItem={(movie) => <MovieItem movie={movie} />}
+							// onSeeMore={() => navigation.navigate('NowPlaying')}
 						/>
 
 						<Text

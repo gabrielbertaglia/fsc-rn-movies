@@ -10,7 +10,6 @@ interface ModalFullCastsProps {
 }
 
 export function ModalFullCasts({ visible, setVisible, movieDetails }: ModalFullCastsProps) {
-	console.log('movieDetails', movieDetails.casts.cast)
 	return (
 		<Modal visible={visible} setVisible={setVisible}>
 			<View style={styles.modalContainer}>
