@@ -18,6 +18,7 @@ import { Badge } from '../../../../components/horizontal-section/badge'
 import { SeeMoreButton } from '../../../../components/see-more'
 import { ModalFullCasts } from '../../../../components/modal/modal-full-casts'
 import { isMovieFavorite, toggleFavorite } from '../../../../storage/favorites'
+import { ModalTrailer } from '../../../../components/modal/modal-trailer'
 
 interface Cast {
 	id: number
@@ -30,13 +31,13 @@ interface MovieDetailsCardProps {
 	onPlayTrailer?: () => void
 	onSeeMoreCast?: () => void
 }
-
 export function MovieDetailsCard({
 	movieDetails,
 	onPlayTrailer,
 	onSeeMoreCast,
 }: MovieDetailsCardProps) {
 	const [showAllCasts, setShowAllCasts] = useState(false)
+	const [showTrailer, setShowTrailer] = useState(false)
 
 	const [isFavorite, setIsFavorite] = useState<boolean | null>(null)
 
@@ -46,6 +47,24 @@ export function MovieDetailsCard({
 		return `${hours}h ${mins}min`
 	}
 
+	function getMovieTrailer(videos?: Videos): Result | null {
+		if (!videos?.results?.length) return null
+
+		return (
+			videos.results.find(
+				(video) => video.site === 'YouTube' && video.type === 'Trailer' && video.official
+			) ||
+			videos.results.find((video) => video.site === 'YouTube' && video.type === 'Trailer') ||
+			videos.results.find((video) => video.site === 'YouTube') ||
+			null
+		)
+	}
+
+	const trailerVideo = getMovieTrailer(movieDetails.videos)
+
+	function handlePlayTrailer() {
+		setShowTrailer(true)
+	}
 	useEffect(() => {
 		let mounted = true
 
@@ -86,7 +105,7 @@ export function MovieDetailsCard({
 					colors={['transparent', 'rgba(0,0,0,0.8)']}
 					style={stylesBanner.bottomGradient}
 				/>
-				<TouchableOpacity style={stylesBanner.playButton}>
+				<TouchableOpacity style={stylesBanner.playButton} onPress={handlePlayTrailer}>
 					<Play size={28} color="#fff" />
 				</TouchableOpacity>
 			</ImageBackground>
@@ -185,6 +204,8 @@ export function MovieDetailsCard({
 				setVisible={setShowAllCasts}
 				movieDetails={movieDetails}
 			/>
+
+			<ModalTrailer videoId={trailerVideo?.key} setVisible={setShowTrailer} visible={showTrailer} />
 		</ScrollView>
 	)
 }
