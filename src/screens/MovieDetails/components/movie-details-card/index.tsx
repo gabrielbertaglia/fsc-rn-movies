@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
 	View,
 	Image,
@@ -8,7 +8,7 @@ import {
 	ImageBackground,
 	FlatList,
 } from 'react-native'
-import { Play } from 'lucide-react-native'
+import { Heart, Play } from 'lucide-react-native'
 import { styles } from './styles'
 import { Text } from '../../../../components/text'
 import { IMAGE_BASE_URL, urlPoster } from '../../../../components/movie-item'
@@ -17,6 +17,7 @@ import { Rating } from '../../../../components/rating'
 import { Badge } from '../../../../components/horizontal-section/badge'
 import { SeeMoreButton } from '../../../../components/see-more'
 import { ModalFullCasts } from '../../../../components/modal/modal-full-casts'
+import { isMovieFavorite, toggleFavorite } from '../../../../storage/favorites'
 
 interface Cast {
 	id: number
@@ -37,10 +38,41 @@ export function MovieDetailsCard({
 }: MovieDetailsCardProps) {
 	const [showAllCasts, setShowAllCasts] = useState(false)
 
+	const [isFavorite, setIsFavorite] = useState<boolean | null>(null)
+
 	const minutesToHours = (minutes: number): string => {
 		const hours = Math.floor(minutes / 60)
 		const mins = minutes % 60
 		return `${hours}h ${mins}min`
+	}
+
+	useEffect(() => {
+		let mounted = true
+
+		async function loadFavoriteStatus() {
+			setIsFavorite(null)
+			const favorite = await isMovieFavorite(movieDetails.id)
+			if (mounted) {
+				setIsFavorite(favorite)
+			}
+		}
+
+		loadFavoriteStatus()
+
+		return () => {
+			mounted = false
+		}
+	}, [movieDetails.id])
+
+	async function handleToggleFavorite() {
+		const newStatus = await toggleFavorite({
+			id: movieDetails.id,
+			title: movieDetails.title,
+			poster_path: movieDetails.poster_path,
+			vote_average: movieDetails.vote_average,
+			genre_ids: movieDetails.genres.map((genre) => genre.id),
+		})
+		setIsFavorite(newStatus)
 	}
 
 	return (
@@ -65,6 +97,16 @@ export function MovieDetailsCard({
 						<Text size={20} weight="bold">
 							{movieDetails.title}
 						</Text>
+
+						{isFavorite !== null && (
+							<TouchableOpacity onPress={handleToggleFavorite}>
+								<Heart
+									size={24}
+									color={isFavorite ? '#E63946' : '#9C9C9C'}
+									fill={isFavorite ? '#E63946' : 'transparent'}
+								/>
+							</TouchableOpacity>
+						)}
 					</View>
 
 					<Rating vote_average={movieDetails.vote_average} />

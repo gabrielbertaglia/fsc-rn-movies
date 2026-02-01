@@ -1,37 +1,40 @@
-import { useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { useNavigation } from '@react-navigation/native'
-
-import { useTMDB } from '../../hooks/useTMDB'
-import { HorizontalSection, VerticalSection } from '../../components/horizontal-section'
+import { FlatList } from 'react-native'
 import { MovieItem, MovieItemHorizontal } from '../../components/movie-item'
+import { HorizontalSection } from '../../components/horizontal-section'
+import { Text } from '../../components/text'
+import { useTMDB } from '../../hooks/useTMDB'
 
 export function Home() {
-	const { getNowPlaying, nowPlayingMovies, popular, getPopular, getGenres } = useTMDB()
-	const navigation = useNavigation()
-
-	useEffect(() => {
-		getNowPlaying({ page: 1 })
-		getPopular({ page: 1 })
-		getGenres()
-	}, [])
+	const { popular, nowPlayingMovies } = useTMDB()
 
 	return (
 		<SafeAreaView style={{ flex: 1 }}>
-			<HorizontalSection
-				title="Now Playing"
-				data={nowPlayingMovies}
-				keyExtractor={(movie) => movie.id.toString()}
-				renderItem={(movie) => <MovieItem movie={movie} />}
-				// onSeeMore={() => navigation.navigate('NowPlaying')}
-			/>
-
-			<VerticalSection
-				title="Popular"
+			<FlatList
 				data={popular}
 				keyExtractor={(movie) => movie.id.toString()}
-				renderItem={(movie) => <MovieItemHorizontal movie={movie} />}
-				// onSeeMore={() => navigation.navigate('Popular')}
+				renderItem={({ item }) => <MovieItemHorizontal movie={item} />}
+				contentContainerStyle={{ paddingHorizontal: 16 }}
+				showsVerticalScrollIndicator={false}
+				ListHeaderComponent={
+					<>
+						<HorizontalSection
+							title="Now Playing"
+							data={nowPlayingMovies}
+							keyExtractor={(movie) => movie.id.toString()}
+							renderItem={(movie) => <MovieItem movie={movie} />}
+						/>
+
+						<Text
+							family="merriweather"
+							size={16}
+							weight="bold"
+							style={{ marginHorizontal: 16, marginBottom: 8 }}
+						>
+							Popular
+						</Text>
+					</>
+				}
 			/>
 		</SafeAreaView>
 	)

@@ -84,6 +84,7 @@ export function useTMDB() {
 	}
 
 	const getMovieDetails = async (movieId: number): Promise<MovieDetails> => {
+		setMovieDetails(null)
 		const { data } = await apiTMDB.get<MovieDetails>(`/movie/${movieId}`, {
 			params: {
 				language: 'pt-BR',

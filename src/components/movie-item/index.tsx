@@ -9,9 +9,22 @@ import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../../types/navigation'
 
-interface MovieItemProps {
-	movie: MovieResult
+export interface BaseMovie {
+	id: number
+	title: string
+	poster_path?: string | null
+	genre_ids: number[]
+	vote_average: number
 }
+
+interface MovieItemProps<T extends BaseMovie> {
+	movie: T
+	disableNavigation?: boolean
+}
+
+// interface MovieItemProps {
+// 	movie: MovieResult
+// }
 
 export const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500'
 
@@ -20,7 +33,7 @@ export function urlPoster(poster_path: string | null | undefined) {
 	return `${IMAGE_BASE_URL}${poster_path}`
 }
 
-export function MovieItem({ movie }: MovieItemProps) {
+export function MovieItem({ movie, disableNavigation }: MovieItemProps<BaseMovie>) {
 	const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
 
 	function handlePress() {
@@ -29,7 +42,7 @@ export function MovieItem({ movie }: MovieItemProps) {
 		})
 	}
 	return (
-		<Pressable onPress={handlePress}>
+		<Pressable onPress={disableNavigation ? undefined : handlePress}>
 			<View style={styles.container}>
 				<Image
 					source={{
@@ -51,7 +64,7 @@ export function MovieItem({ movie }: MovieItemProps) {
 	)
 }
 
-export function MovieItemHorizontal({ movie }: MovieItemProps) {
+export function MovieItemHorizontal({ movie, disableNavigation }: MovieItemProps<BaseMovie>) {
 	const { genres } = useTMDB()
 	const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
 
@@ -67,8 +80,10 @@ export function MovieItemHorizontal({ movie }: MovieItemProps) {
 		})
 	}
 
+	console.log('movie.genre_ids', movie.genre_ids)
+
 	return (
-		<Pressable onPress={handlePress}>
+		<Pressable onPress={disableNavigation ? undefined : handlePress}>
 			<View style={styles.horizontalContainer}>
 				<Image
 					source={{

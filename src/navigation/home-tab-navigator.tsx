@@ -1,7 +1,6 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { Home } from '../screens/Home'
-import { Bookmark, Film, Ticket } from 'lucide-react-native'
-import { Tickets } from '../screens/Tickets'
+import { Bookmark, Film } from 'lucide-react-native'
 import { Favorites } from '../screens/Favorites'
 import { TabBar } from './tab-bar'
 
@@ -9,10 +8,6 @@ const Tab = createBottomTabNavigator()
 
 function FilmTabIcon({ color, size }: { color: string; size: number }) {
 	return <Film color={color} size={size} />
-}
-
-function TicketsTabIcon({ color, size }: { color: string; size: number }) {
-	return <Ticket color={color} size={size} />
 }
 
 function FavoritesTabIcon({ color, size }: { color: string; size: number }) {
@@ -34,13 +29,7 @@ export function HomeTabNavigator() {
 					tabBarIcon: FilmTabIcon,
 				}}
 			/>
-			<Tab.Screen
-				name="Tickets"
-				component={Tickets}
-				options={{
-					tabBarIcon: TicketsTabIcon,
-				}}
-			/>
+
 			<Tab.Screen
 				name="Favorites"
 				component={Favorites}
