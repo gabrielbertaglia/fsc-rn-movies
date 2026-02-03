@@ -39,9 +39,12 @@ export function urlPoster(poster_path: string | null | undefined) {
 export function NowPlaying() {
 	const navigation = useNavigation()
 
+	const onEndReachedCalledDuringMomentum = React.useRef(false)
+
 	const FavoritesHeader = ({ onBackPress }: NowPlayingScreenProps) => (
 		<Header title="Now Playing" onBackPress={onBackPress} />
 	)
+
 	React.useLayoutEffect(() => {
 		navigation.setOptions({
 			title: 'Now Playing',
@@ -52,12 +55,17 @@ export function NowPlaying() {
 	const { getNowPlaying, nowPlayingMovies, nowPlayingPage, nowPlayingLoading, nowPlayingHasMore } =
 		useTMDB()
 
-	// useEffect(() => {
-	// 	getNowPlaying({ page: 1 })
-	// }, [])
+	useEffect(() => {
+		if (nowPlayingMovies.length === 0) {
+			getNowPlaying({ page: 1 })
+		}
+	}, [])
 
 	const loadMore = useCallback(() => {
+		if (onEndReachedCalledDuringMomentum.current) return
 		if (nowPlayingLoading || !nowPlayingHasMore) return
+
+		onEndReachedCalledDuringMomentum.current = true
 		getNowPlaying({ page: nowPlayingPage + 1 })
 	}, [nowPlayingLoading, nowPlayingHasMore, nowPlayingPage])
 
@@ -66,13 +74,16 @@ export function NowPlaying() {
 	return (
 		<SafeAreaView style={stylesNowPlaying.container}>
 			<FlatList
-				data={[]}
+				data={nowPlayingMovies}
 				keyExtractor={keyExtractor}
 				renderItem={({ item }) => <MovieItem movie={item} />}
 				numColumns={3}
 				contentContainerStyle={stylesNowPlaying.contentContainer}
 				showsVerticalScrollIndicator={false}
 				onEndReached={loadMore}
+				onMomentumScrollBegin={() => {
+					onEndReachedCalledDuringMomentum.current = false
+				}}
 				onEndReachedThreshold={0.2}
 				ListEmptyComponent={
 					nowPlayingLoading ? null : (
