@@ -1,10 +1,10 @@
-import { useCallback, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { View } from 'react-native'
 import { Text } from '../../components/text'
 import { MovieItemHorizontal } from '../../components/movie-item'
 import { getFavorites } from '../../storage/favorites'
 import { VerticalSection } from '../../components/horizontal-section'
-import { useFocusEffect } from '@react-navigation/native'
+import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { FavoriteMovie } from '../../types/favorites'
 
 export function Favorites() {

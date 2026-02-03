@@ -1,6 +1,7 @@
 import { useAtom } from 'jotai'
 import { apiTMDB } from '../data-sources/tmdb'
 import { atoms } from '../atoms'
+import { useCallback } from 'react'
 
 export interface MovieResult {
 	adult: boolean
@@ -45,33 +46,72 @@ export interface MovieResultWithRuntime extends MovieResult {
 	runtime: number | null
 }
 
+async function fetchPagedList<T>({
+	endpoint,
+	page,
+	params,
+	setList,
+	setPage,
+	setHasMore,
+}: {
+	endpoint: string
+	page: number
+	params?: Record<string, any>
+	setList: (update: (prev: T[]) => T[]) => void
+	setPage: (page: number) => void
+	setHasMore: (hasMore: boolean) => void
+}) {
+	const { data } = await apiTMDB.get<TMDBListResponse<T>>(endpoint, {
+		params: {
+			language: 'pt-BR',
+			page,
+			...params,
+		},
+	})
+
+	setList((prev) => (page === 1 ? data.results : [...prev, ...data.results]))
+	setPage(page)
+	setHasMore(page < data.total_pages)
+}
+
 export function useTMDB() {
 	const [nowPlayingMovies, setNowPlayingMovies] = useAtom<MovieResult[]>(atoms.nowPlayingMovies)
 	const [popular, setPopular] = useAtom<MovieResult[]>(atoms.popularMovies)
 	const [genres, setGenres] = useAtom<Genre[]>(atoms.genres)
 	const [movieDetails, setMovieDetails] = useAtom(atoms.movieDetails)
 
-	const getNowPlaying = async ({
-		page = 1,
-		minDate,
-		maxDate,
-	}: GetNowPlayingParams): Promise<MovieResult[]> => {
-		const { data } = await apiTMDB.get<TMDBListResponse<MovieResult>>('/discover/movie', {
-			params: {
-				include_adult: false,
-				include_video: false,
-				language: 'pt-BR',
-				sort_by: 'popularity.desc',
-				with_release_type: '2|3',
-				page,
-				...(minDate && { 'release_date.gte': minDate }),
-				...(maxDate && { 'release_date.lte': maxDate }),
-			},
-		})
+	const [nowPlayingPage, setNowPlayingPage] = useAtom(atoms.nowPlayingPage)
+	const [nowPlayingLoading, setNowPlayingLoading] = useAtom(atoms.nowPlayingLoading)
+	const [nowPlayingHasMore, setNowPlayingHasMore] = useAtom(atoms.nowPlayingHasMore)
 
-		setNowPlayingMovies(data.results)
-		return data.results
-	}
+	const getNowPlaying = useCallback(
+		async ({ page = 1, minDate, maxDate }: GetNowPlayingParams): Promise<void> => {
+			if (nowPlayingLoading || !nowPlayingHasMore) return
+
+			setNowPlayingLoading(true)
+
+			try {
+				await fetchPagedList<MovieResult>({
+					endpoint: '/discover/movie',
+					page,
+					params: {
+						include_adult: false,
+						include_video: false,
+						sort_by: 'popularity.desc',
+						with_release_type: '2|3',
+						...(minDate && { 'release_date.gte': minDate }),
+						...(maxDate && { 'release_date.lte': maxDate }),
+					},
+					setList: setNowPlayingMovies,
+					setPage: setNowPlayingPage,
+					setHasMore: setNowPlayingHasMore,
+				})
+			} finally {
+				setNowPlayingLoading(false)
+			}
+		},
+		[nowPlayingLoading, nowPlayingHasMore]
+	)
 
 	const getGenres = async () => {
 		const { data } = await apiTMDB.get<TMDBGenresResponse>('/genre/movie/list', {
@@ -113,6 +153,11 @@ export function useTMDB() {
 		popular,
 		genres,
 		movieDetails,
+
+		nowPlayingPage,
+		nowPlayingLoading,
+		nowPlayingHasMore,
+
 		getNowPlaying,
 		getPopular,
 		getGenres,

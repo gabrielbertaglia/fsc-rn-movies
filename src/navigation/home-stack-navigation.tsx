@@ -15,7 +15,13 @@ export function HomeStackNavigation() {
 		>
 			<Stack.Screen name="HomeTabs" component={HomeTabNavigator} />
 			<Stack.Screen name="MovieDetails" component={MovieDetails} />
-			<Stack.Screen name="NowPlaying" component={NowPlaying} />
+			<Stack.Screen
+				name="NowPlaying"
+				component={NowPlaying}
+				options={{
+					headerShown: true,
+				}}
+			/>
 			<Stack.Screen name="Popular" component={Popular} />
 		</Stack.Navigator>
 	)
